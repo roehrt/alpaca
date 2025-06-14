@@ -50,7 +50,7 @@ int main() {
 
     Alpaca::Settings settings;
     // settings.should_terminate = [&]() -> bool { return sigints_received; };
-    settings.verbosity = 5;
+    settings.verbosity = 0;
 
     if (task == "hs") {
         size_t total_lits = 0;
