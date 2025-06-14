@@ -671,7 +671,7 @@ namespace Alpaca {
                     return OPTIMAL;
                 }
             }
-            if (context.settings.ilp_enabled && 2 * sum < 7 * context.clauses.size()) {
+            if (context.bound != context.objective_value && context.settings.ilp_enabled && 2 * sum < 7 * context.clauses.size()) {
                 if (runilp() != SCIP_OKAY) return ERROR;
                 return context.bound == context.objective_value ? OPTIMAL : SATISFIABLE;
             }
