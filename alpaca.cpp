@@ -571,23 +571,21 @@ namespace Alpaca {
             using namespace scippp;
             Model model("model");
 
-            vector<int> objective(oracle.vars());
+            vector<int> objective(context.vars);
             uint64_t offset = context.offset;
             for (int32_t lit: context.soft) {
                 objective[abs(lit) - 1] = lit > 0 ? -1 : 1;
                 offset += lit > 0;
             }
-            auto x = model.addVars("x_", oracle.vars(), objective, VarType::BINARY);
+            auto x = model.addVars("x_", context.vars, objective, VarType::BINARY);
             auto offset_var = model.addVar("offset", offset, VarType::BINARY, 1, 1);
 
-            Export export_model([&](const vector<int> &c) {
+            for (const vector<int> &c : context.clauses) {
                 LinExpr clause;
                 for (int lit: c)
                     clause += lit > 0 ? x[abs(lit) - 1] : (1 - x[abs(lit) - 1]);
                 model.addConstr(clause >= 1, "c");
-                return true;
-            });
-            oracle.traverse_clauses(export_model);
+            }
 
             auto scip = model.scip();
             SCIP_SOL *sol;
@@ -616,6 +614,9 @@ namespace Alpaca {
         Status solve() {
             if (zero_weight() == OPTIMAL) return OPTIMAL;
             if (context.settings.should_terminate()) return UNKNOWN;
+            size_t sum = 0;
+            for (const auto &clause: context.clauses) sum += clause.size();
+            context.settings.ilp_enabled &= 2 * sum < 7 * context.clauses.size();
             oracle.connect_terminator(new CaDiCaLTerminator(context));
             if (sat_solve(vector<int32_t>{}) == CaDiCaL::UNSATISFIABLE) {
                 context.log("unsatisfiable");
@@ -624,8 +625,6 @@ namespace Alpaca {
             if (context.settings.should_terminate()) return SATISFIABLE;
             for (int32_t lit: context.soft) depth[abs(lit)] = 1;
             assumptions = set(begin(context.soft), end(context.soft));
-            size_t sum = 0;
-            for (const auto &clause: context.clauses) sum += clause.size();
             packing_bound();
             // deque<double> history;
             // for (int i = 0; i < 10; ++i) history.push_back(50);
@@ -671,11 +670,12 @@ namespace Alpaca {
                     return OPTIMAL;
                 }
             }
-            if (context.bound != context.objective_value && context.settings.ilp_enabled && 2 * sum < 7 * context.clauses.size()) {
+            if (context.bound != context.objective_value && context.settings.ilp_enabled) {
                 if (runilp() != SCIP_OKAY) return ERROR;
                 return context.bound == context.objective_value ? OPTIMAL : SATISFIABLE;
             }
             if (context.settings.should_terminate()) return SATISFIABLE;
+            assert(context.bound == context.objective_value);
             return OPTIMAL;
         }
     };
@@ -696,6 +696,7 @@ namespace Alpaca {
             pre.preprocess(context.settings.preprocessing_seconds);
             Internal internal(context);
             Status status = internal.solve();
+            if (status != OPTIMAL) exit(1);
             if (status == SATISFIABLE || status == OPTIMAL)
                 model = pre.reconstruct(context.model), model.insert(model.begin(), 0);
             return status;

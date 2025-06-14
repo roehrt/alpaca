@@ -50,7 +50,7 @@ int main() {
 
     Alpaca::Settings settings;
     // settings.should_terminate = [&]() -> bool { return sigints_received; };
-    settings.verbosity = 0;
+    settings.verbosity = 5;
 
     if (task == "hs") {
         size_t total_lits = 0;
@@ -63,10 +63,13 @@ int main() {
     for (const auto &clause: clauses)
         solver.add(clause);
     solver.solve();
+    vector hit(n+1, false);
     cout << solver.objective_value() << "\n";
     for (int i = 1; i <= n; ++i)
-        if (solver.value(i) > 0)
+        if (hit[i] = solver.value(i) > 0)
             cout << i << "\n";
+    for (const auto& clause : clauses)
+        assert(ranges::any_of(clause, [&](int j) { return hit[j]; }));
 
     return 0;
 }
