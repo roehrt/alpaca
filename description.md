@@ -116,12 +116,10 @@ Sivasankaran Rajamanickam, 1–11. SIAM.
 An Efficient MaxSAT Solver.” *J. Satisf. Boolean Model. Comput.* 11 (1):
 53–64. <https://doi.org/10.3233/SAT190116>.
 
-[^7]: Jabs, Christoph, Jeremias Berg, Hannes Ihalainen, and Matti Järvisalo. 2023. “Preprocessing in SAT-Based Multi-Objective Combinatorial
-Optimization.” In *29th International Conference on Principles and
-Practice of Constraint Programming, CP 2023, August 27-31, 2023,
-Toronto, Canada*, edited by Roland H. C. Yap, 280:18:1–20. LIPIcs.
-Schloss Dagstuhl - Leibniz-Zentrum für Informatik.
-<https://doi.org/10.4230/LIPICS.CP.2023.18>.
+[^7]: Ihalainen, Hannes, Jeremias Berg, and Matti Järvisalo. 2022. “Clause
+Redundancy and Preprocessing in Maximum Satisfiability.” In *Proceedings
+of the 11th International Joint Conference on Automated Reasoning
+(IJCAR ’22)*, 13385:75–94. Lecture Notes in Computer Science. Springer.
 
 [^8]: Martins, Ruben, Saurabh Joshi, Vasco Manquinho, and Inês Lynce. 2014.
 “Incremental Cardinality Constraints for MaxSAT.” In *Principles and
