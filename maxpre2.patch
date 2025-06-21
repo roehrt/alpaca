@@ -1,0 +1,35 @@
+diff --git a/src/AMSLEX.cpp b/src/AMSLEX.cpp
+index f017b62..cd113e5 100644
+--- a/src/AMSLEX.cpp
++++ b/src/AMSLEX.cpp
+@@ -197,6 +197,7 @@ vector<int> AMSLEX::amsLexSENonPerm(const vector<int>& clauses) {
+ }
+ 
+ vector<int> AMSLEX::amsLexSEPerm(const vector<int>& clauses) {
++	return amsLexSENonPerm(clauses);
+ 	vector<vecP> D(clauses.size());
+ 	vector<int> d0Index;
+ 	ALIt++;
+diff --git a/src/Makefile b/src/Makefile
+index d9d48ad..4b690b8 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -1,6 +1,6 @@
+ GITV = $(shell git describe --always --dirty)
+ CC = g++
+-CFLAGS = -std=c++11 -O2 -Wall -Wextra -Wshadow -g -Wfatal-errors -fPIC -Isatsolver/solvers/glucose3/ -DGIT_IDENTIFIER=\"$(GITV)\"
++CFLAGS = -std=c++11 -O3 -Wall -Wextra -Wshadow -DNDEBUG -Wfatal-errors -fPIC -Isatsolver/solvers/glucose3/ -DGIT_IDENTIFIER=\"$(GITV)\"
+ OBJFILES = preprocessor.o inputreader.o outputreader.o preprocessedinstance.o trace.o utility.o probleminstance.o timer.o clause.o log.o AMSLEX.o touchedlist.o preprocessorinterface.o cardinalityconstraint.o satlikeinterface.o cpreprocessorinterface.o prooflogger.o
+ LIBS =
+ LIBFILES = satsolver/solvers/lib/libglucose3.a
+diff --git a/src/satsolver/solvers/glucose3/Makefile b/src/satsolver/solvers/glucose3/Makefile
+index 1285efb..d605805 100644
+--- a/src/satsolver/solvers/glucose3/Makefile
++++ b/src/satsolver/solvers/glucose3/Makefile
+@@ -1,5 +1,5 @@
+ CC = g++
+-CFLAGS = -std=c++11 -O2 -Wall -Wextra -Wshadow -g -Wfatal-errors -I.
++CFLAGS = -std=c++11 -O3 -Wall -Wextra -Wshadow -DNDEBUG -Wfatal-errors -I.
+ OBJFILES = utils/System.o
+ LIBFILES =
+ 

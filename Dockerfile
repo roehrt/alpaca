@@ -29,11 +29,8 @@ RUN git clone -b rel-4.0.2 --depth 1 https://github.com/arminbiere/kissat.git
 RUN cd kissat && ./configure --ultimate --sat && make -j$(nproc)
 
 RUN git clone --depth 1 https://bitbucket.org/coreo-group/maxpre2.git
-RUN cd maxpre2 && sed -i -e 's/-g/-DNDEBUG/g' src/Makefile && \
-    sed -i -e 's/-O2/-O3/g' src/Makefile &&  \
-    sed -i -e 's/-g/-DNDEBUG/g' src/satsolver/solvers/glucose3/Makefile &&  \
-    sed -i -e 's/-O2/-O3/g' src/satsolver/solvers/glucose3/Makefile && \
-    make lib -j$(nproc)
+COPY maxpre2.patch maxpre2/maxpre2.patch
+RUN cd maxpre2 && git apply maxpre2.patch && make lib -j$(nproc)
 
 WORKDIR /solver
 COPY CMakeLists.txt CMakeLists.txt
