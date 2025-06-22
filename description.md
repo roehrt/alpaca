@@ -76,7 +76,7 @@ validated in (Max)SAT and ILP competitions, respectively.
 
 - **Hyperparameter tuning.** There are many hyperparameters in Alpaca, but they are not fine-tuned (yet) due to lack of time and resources.
 - **Portfolio/Special case solvers.** Dedicated solvers have been developed for special cases of the Hitting Set problem,
-  such as the 2016 PACE winner WeGotYouCovered for Vertex Cover [^5]. Integrating these solvers could significantly improve performance in those specific cases.
+  such as the 2019 PACE winner WeGotYouCovered for Vertex Cover [^5]. Integrating these solvers could significantly improve performance in those specific cases.
 - **Start `SCIP` without `maxpre2` preprocessing.** The MaxSAT preprocessing appears to
   slow down `SCIP`.
 
